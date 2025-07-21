@@ -1,0 +1,521 @@
+/* General Body & Typography */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+pre {
+    font-family: 'SF Mono', 'Fira Code', 'Source Code Pro', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.back-link {
+    font-size: 1rem;
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #007bff;
+}
+
+/* Buttons */
+.button, .button-secondary, .submit-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.button-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.button-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* Alerts */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+/* Main Content & Cards */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.project-group, .upload-form-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.project-title {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* App Grid (Index Page) */
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.app-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.app-icon-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    margin-right: 1rem;
+    object-fit: cover;
+    background-color: #e9ecef; /* Placeholder background */
+}
+
+.app-icon-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.app-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.package-name {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.version-info {
+    font-size: 0.9rem;
+    color: #333;
+    margin-top: 0.25rem;
+}
+
+.no-apps-message {
+    text-align: center;
+    padding: 3rem;
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+/* Details Page - New Design */
+.detail-page-wrapper {
+    max-width: 800px; /* Slightly wider for better content display */
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.detail-header-top {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    font-size: 1.5rem;
+    color: #555;
+    text-decoration: none;
+    margin-right: 1.5rem;
+    transition: color 0.2s;
+}
+
+.back-button:hover {
+    color: #007bff;
+}
+
+.app-identity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.app-icon-header {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+
+.app-icon-placeholder.header {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.app-text-info h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.app-text-info .package-name {
+    font-size: 1rem;
+    color: #666;
+}
+
+.detail-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.version-meta {
+    margin-bottom: 1.5rem;
+}
+
+.version-meta h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.channel-badge {
+    padding: 0.3em 0.8em;
+    border-radius: 1em;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.upload-time {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.release-notes-full h3 {
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.release-notes-full pre {
+    margin-bottom: 0;
+}
+
+.download-area {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.download-button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.qr-code-container {
+    text-align: center;
+}
+
+.qr-code-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.qr-code-container p {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* History Section */
+.history-section h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.history-item:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.item-left {
+    flex-grow: 1;
+}
+
+.history-item .version-details {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.history-item .version-number {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.channel-badge-small {
+    padding: 0.2em 0.6em;
+    border-radius: 1em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.history-item .upload-time {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 0.5rem;
+}
+
+.release-notes-short {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 0.9rem;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px; /* Adjust as needed */
+}
+
+.download-history-btn {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 50%; /* Make it round */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Upload Form */
+.upload-form-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input[type="text"], 
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group input[type="file"] {
+    padding: 0;
+    border: none;
+}
+
+.submit-btn {
+    width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .detail-page-wrapper {
+        margin: 1rem auto;
+        padding: 0 1rem;
+    }
+
+    .detail-header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .back-button {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .app-identity {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+
+    .app-text-info h1 {
+        font-size: 1.5rem;
+    }
+
+    .app-text-info .package-name {
+        font-size: 0.9rem;
+    }
+
+    .download-button {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+    }
+
+    .qr-code-img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .download-history-btn {
+        width: 100%;
+        border-radius: 8px;
+        padding: 0.5rem;
+        height: auto;
+    }
+
+    .release-notes-short {
+        max-width: none; /* Allow full width on small screens */
+        white-space: normal;
+    }
+}

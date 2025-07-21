@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.App.AppName}} - 详情</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="detail-page-wrapper">
+        <header class="detail-header-top">
+            <a href="/" class="back-button" aria-label="返回首页">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="app-identity">
+                {{if .App.IconPath}}
+                    <img src="/{{.App.IconPath}}" alt="{{.App.AppName}}" class="app-icon-header">
+                {{else}}
+                    <div class="app-icon-placeholder header">
+                        <span>{{.App.AppName | first}}</span>
+                    </div>
+                {{end}}
+                <div class="app-text-info">
+                    <h1>{{.App.AppName}}</h1>
+                    <p class="package-name">{{.App.PackageName}}</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="detail-main-content">
+            {{with index .App.Builds 0}}
+            <section class="latest-version-section card">
+                <div class="version-meta">
+                    <h2 class="version-number">版本: {{.Version}}</h2>
+                    <span class="channel-badge">{{.Channel}}</span>
+                    <p class="upload-time">上传于: {{.UploadTime}}</p>
+                </div>
+                
+                <div class="release-notes-full">
+                    <h3>更新日志</h3>
+                    <pre>{{.ReleaseNotes}}</pre>
+                </div>
+
+                <div class="download-area">
+                    <a href="{{.DownloadURL}}" class="button download-button">
+                        <i class="fas fa-download"></i> 下载 APK ({{.FileSize | formatSize}})
+                    </a>
+                    <div class="qr-code-container">
+                        <img src="/qr?url={{$.BaseURL}}{{.DownloadURL}}" alt="下载二维码" class="qr-code-img">
+                        <p>扫码下载</p>
+                    </div>
+                </div>
+            </section>
+            {{end}}
+
+            <section class="history-section card">
+                <h2>历史版本</h2>
+                <div class="history-list">
+                    {{range .App.Builds}}
+                    <div class="history-item">
+                        <div class="item-left">
+                            <div class="version-details">
+                                <span class="version-number">{{.Version}}</span>
+                                <span class="channel-badge-small">{{.Channel}}</span>
+                            </div>
+                            <p class="upload-time">{{.UploadTime}}</p>
+                            <pre class="release-notes-short">{{.ReleaseNotes}}</pre>
+                        </div>
+                        <a href="{{.DownloadURL}}" class="button-secondary download-history-btn">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
+                    {{end}}
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

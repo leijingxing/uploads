@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传应用</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/" class="back-link">&larr; 返回首页</a>
+            <h1>上传新应用</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="upload-form-card">
+                <form action="/api/upload" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="source" value="web">
+
+                    <div class="form-group">
+                        <label for="projectName">项目名称</label>
+                        <input type="text" name="projectName" id="projectName" placeholder="例如：核心电商项目" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="channel">渠道 (Channel)</label>
+                        <input type="text" name="channel" id="channel" placeholder="例如：GooglePlay, AppStore, an-zhi, official" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="releaseNotes">更新说明</label>
+                        <textarea name="releaseNotes" id="releaseNotes" rows="5" placeholder="- 修复了购物车Bug；
+- 优化了性能。"></textarea>
+                    </div>
+
+                    <div class="form-group file-input-group">
+                        <label for="file">应用文件 (.apk)</label>
+                        <input type="file" name="file" id="file" accept=".apk" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="button submit-btn">上传并发布</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

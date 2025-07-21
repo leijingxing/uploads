@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用分发平台 - 所有项目</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>应用分发平台</h1>
+            <a href="/upload" class="button upload-btn">上传新应用</a>
+        </header>
+
+        {{if eq .UploadStatus "success"}}
+            <div class="alert success">
+                <strong>成功!</strong> 您的应用已上传并可用。
+            </div>
+        {{end}}
+
+        <main class="main-content">
+            {{if .AllProjects}}
+                {{range .AllProjects}}
+                    <section class="project-group">
+                        <h2 class="project-title">{{.ProjectName}}</h2>
+                        <div class="app-grid">
+                            {{range .Apps}}
+                                <a href="/app/{{.PackageName}}" class="app-card">
+                                    {{if .IconPath}}
+                                        <img src="/{{.IconPath}}" alt="{{.AppName}}" class="app-icon-img">
+                                    {{else}}
+                                        <div class="app-icon-placeholder">
+                                            <span>{{.AppName | first}}</span>
+                                        </div>
+                                    {{end}}
+                                    <div class="app-info">
+                                        <span class="app-name">{{.AppName}}</span>
+                                        <span class="package-name">{{.PackageName}}</span>
+                                        <span class="version-info">最新: {{ (index .Builds 0).Version }}</span>
+                                    </div>
+                                </a>
+                            {{end}}
+                        </div>
+                    </section>
+                {{end}}
+            {{else}}
+                <div class="no-apps-message">
+                    <h3>无应用</h3>
+                    <p>这里还没有任何应用。立即上传您的第一个应用吧！</p>
+                    <a href="/upload" class="button">开始上传</a>
+                </div>
+            {{end}}
+        </main>
+    </div>
+</body>
+</html>
