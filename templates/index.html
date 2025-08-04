@@ -10,6 +10,7 @@
     <div class="container">
         <header class="header">
             <h1>应用分发平台</h1>
+            <input type="search" id="search-box" class="search-box" placeholder="搜索应用名或包名...">
             <a href="/upload" class="button upload-btn">上传新应用</a>
         </header>
 
@@ -26,9 +27,9 @@
                         <h2 class="project-title">{{.ProjectName}}</h2>
                         <div class="app-grid">
                             {{range .Apps}}
-                                <a href="/app/{{.PackageName}}" class="app-card">
+                                <a href="/app/{{.PackageName}}" class="app-card" data-search-name="{{.AppName}}" data-search-package="{{.PackageName}}">
                                     {{if .IconPath}}
-                                        <img src="/{{.IconPath}}" alt="{{.AppName}}" class="app-icon-img">
+                                        <img src="{{.IconPath}}" alt="{{.AppName}}" class="app-icon-img">
                                     {{else}}
                                         <div class="app-icon-placeholder">
                                             <span>{{.AppName | first}}</span>
@@ -53,5 +54,38 @@
             {{end}}
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchBox = document.getElementById('search-box');
+            if (!searchBox) return;
+
+            searchBox.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase().trim();
+                const appCards = document.querySelectorAll('.app-card');
+                const projectGroups = document.querySelectorAll('.project-group');
+
+                appCards.forEach(card => {
+                    const appName = card.dataset.searchName.toLowerCase();
+                    const packageName = card.dataset.searchPackage.toLowerCase();
+                    
+                    if (appName.includes(searchTerm) || packageName.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                projectGroups.forEach(group => {
+                    const visibleCards = group.querySelectorAll('.app-card[style*="display: flex"]');
+                    if (visibleCards.length > 0) {
+                        group.style.display = 'block';
+                    } else {
+                        group.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

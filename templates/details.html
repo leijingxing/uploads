@@ -3,78 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.App.AppName}} - 详情</title>
+    <title>{{.App.AppName}} - 应用详情</title>
     <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="detail-page-wrapper">
-        <header class="detail-header-top">
-            <a href="/" class="back-button" aria-label="返回首页">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            <div class="app-identity">
-                {{if .App.IconPath}}
-                    <img src="/{{.App.IconPath}}" alt="{{.App.AppName}}" class="app-icon-header">
-                {{else}}
-                    <div class="app-icon-placeholder header">
-                        <span>{{.App.AppName | first}}</span>
-                    </div>
-                {{end}}
-                <div class="app-text-info">
-                    <h1>{{.App.AppName}}</h1>
-                    <p class="package-name">{{.App.PackageName}}</p>
-                </div>
-            </div>
+    <div class="container">
+        <header class="header">
+            <h1><a href="/" style="color: inherit; text-decoration: none;">应用分发平台</a></h1>
+            <a href="/upload" class="button upload-btn">上传新应用</a>
         </header>
 
-        <main class="detail-main-content">
-            {{with index .App.Builds 0}}
-            <section class="latest-version-section card">
-                <div class="version-meta">
-                    <h2 class="version-number">版本: {{.Version}}</h2>
-                    <span class="channel-badge">{{.Channel}}</span>
-                    <p class="upload-time">上传于: {{.UploadTime}}</p>
-                </div>
-                
-                <div class="release-notes-full">
-                    <h3>更新日志</h3>
-                    <pre>{{.ReleaseNotes}}</pre>
-                </div>
+        <div class="breadcrumb">
+            <a href="/">所有项目</a> &gt; {{.ProjectName}}
+        </div>
 
-                <div class="download-area">
-                    <a href="{{.DownloadURL}}" class="button download-button">
-                        <i class="fas fa-download"></i> 下载 APK ({{.FileSize | formatSize}})
-                    </a>
-                    <div class="qr-code-container">
-                        <img src="/qr?url={{$.BaseURL}}{{.DownloadURL}}" alt="下载二维码" class="qr-code-img">
-                        <p>扫码下载</p>
-                    </div>
+        <div class="details-header">
+            {{if .App.IconPath}}
+                <img src="/{{.App.IconPath}}" alt="{{.App.AppName}}" class="app-icon-img">
+            {{else}}
+                <div class="app-icon-placeholder">
+                    <span>{{.App.AppName | first}}</span>
                 </div>
-            </section>
             {{end}}
+            <div class="app-info">
+                <h2 class="app-name">{{.App.AppName}}</h2>
+                <p class="package-name">{{.App.PackageName}}</p>
+            </div>
+        </div>
 
-            <section class="history-section card">
-                <h2>历史版本</h2>
-                <div class="history-list">
-                    {{range .App.Builds}}
-                    <div class="history-item">
-                        <div class="item-left">
-                            <div class="version-details">
-                                <span class="version-number">{{.Version}}</span>
-                                <span class="channel-badge-small">{{.Channel}}</span>
-                            </div>
-                            <p class="upload-time">{{.UploadTime}}</p>
-                            <pre class="release-notes-short">{{.ReleaseNotes}}</pre>
+        <h3>所有版本 ({{len .App.Builds}})</h3>
+        <div class="build-list-container">
+            {{range .App.Builds}}
+            <div class="build-card">
+                <div class="build-card-main">
+                    <div class="build-card-info">
+                        <div class="version">版本 {{.Version}}</div>
+                        <div class="build-meta">
+                            <span>渠道: {{.Channel}}</span>
+                            <span>大小: {{.FileSize | formatSize}}</span>
+                            <span>上传于: {{.UploadTime}}</span>
                         </div>
-                        <a href="{{.DownloadURL}}" class="button-secondary download-history-btn">
-                            <i class="fas fa-download"></i>
-                        </a>
                     </div>
-                    {{end}}
+                    <div class="build-card-actions">
+                        <!-- QR code is now an image -->
+                        <img src="/qr?url={{$.BaseURL}}{{.DownloadURL}}" alt="二维码" class="qr-code-image">
+                        <div class="action-buttons">
+                            <a href="{{.DownloadURL}}" class="button upload-btn">下载</a>
+                            <button class="button delete-btn" data-package="{{$.App.PackageName}}" data-file="{{.FileName}}">删除</button>
+                        </div>
+                    </div>
                 </div>
-            </section>
-        </main>
+                {{if .ReleaseNotes}}
+                <div class="build-card-notes">
+                    <p><strong>更新日志:</strong> {{.ReleaseNotes}}</p>
+                </div>
+                {{end}}
+            </div>
+            {{end}}
+        </div>
+
+        <button class="button delete-app-btn" data-package="{{.App.PackageName}}">删除整个应用</button>
+
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handler for deleting a single build
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageName = this.dataset.package;
+                    const fileName = this.dataset.file;
+                    
+                    if (confirm(`您确定要删除这个构建版本 (${fileName}) 吗？此操作不可撤销。`)) {
+                        fetch(`/api/builds/${packageName}/${fileName}`, {
+                            method: 'DELETE',
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                alert('删除成功！');
+                                location.reload(); // Reload the page to see the result
+                            } else {
+                                alert('删除失败: ' + (data.error || '未知错误'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('删除时发生网络错误。');
+                        });
+                    }
+                });
+            });
+
+            // Handler for deleting the entire app
+            const deleteAppButton = document.querySelector('.delete-app-btn');
+            if(deleteAppButton) {
+                deleteAppButton.addEventListener('click', function() {
+                    const packageName = this.dataset.package;
+                    
+                    if (confirm(`您确定要删除整个应用 "${packageName}" 吗？\n\n这将删除其所有的构建版本，此操作不可撤销！`)) {
+                        fetch(`/api/apps/${packageName}`, {
+                            method: 'DELETE',
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                alert('应用删除成功！');
+                                window.location.href = '/'; // Redirect to homepage
+                            } else {
+                                alert('删除失败: ' + (data.error || '未知错误'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('删除时发生网络错误。');
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
