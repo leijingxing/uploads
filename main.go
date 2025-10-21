@@ -41,6 +41,8 @@ type Project struct {
 	Apps        []AppEntry `json:"apps"`
 }
 
+const deletePassword = "9527"
+
 var (
 	allProjects      []Project
 	mutex            = &sync.Mutex{}
@@ -323,6 +325,11 @@ func handleApiUpload(c *gin.Context) {
 }
 
 func handleDeleteBuild(c *gin.Context) {
+	if c.Query("password") != deletePassword {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "删除密码错误"})
+		return
+	}
+
 	packageName := c.Param("packageName")
 	fileName := c.Param("fileName")
 
@@ -391,6 +398,11 @@ func handleDeleteBuild(c *gin.Context) {
 }
 
 func handleDeleteApp(c *gin.Context) {
+	if c.Query("password") != deletePassword {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "删除密码错误"})
+		return
+	}
+
 	packageName := c.Param("packageName")
 
 	mutex.Lock()

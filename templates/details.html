@@ -9,12 +9,12 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><a href="/" style="color: inherit; text-decoration: none;">应用分发平台</a></h1>
+            <h1><a href="/" class="header-link">应用分发平台</a></h1>
             <a href="/upload" class="button upload-btn">上传新应用</a>
         </header>
 
         <div class="breadcrumb">
-            <a href="/">所有项目</a> &gt; {{.ProjectName}}
+            <a href="/">返回项目库</a> &gt; {{.ProjectName}}
         </div>
 
         <div class="details-header">
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <h3>所有版本 ({{len .App.Builds}})</h3>
+        <h3>发布版本（{{len .App.Builds}}）</h3>
         <div class="build-list-container">
             {{range .App.Builds}}
             <div class="build-card">
@@ -39,13 +39,12 @@
                     <div class="build-card-info">
                         <div class="version">版本 {{.Version}}</div>
                         <div class="build-meta">
-                            <span>渠道: {{.Channel}}</span>
-                            <span>大小: {{.FileSize | formatSize}}</span>
-                            <span>上传于: {{.UploadTime}}</span>
+                            <span>渠道：{{.Channel}}</span>
+                            <span>文件：{{.FileSize | formatSize}}</span>
+                            <span>上传时间：{{.UploadTime}}</span>
                         </div>
                     </div>
                     <div class="build-card-actions">
-                        <!-- QR code is now an image -->
                         <img src="/qr?url={{$.BaseURL}}{{.DownloadURL}}" alt="二维码" class="qr-code-image">
                         <div class="action-buttons">
                             <a href="{{.DownloadURL}}" class="button upload-btn">下载</a>
@@ -55,7 +54,7 @@
                 </div>
                 {{if .ReleaseNotes}}
                 <div class="build-card-notes">
-                    <p><strong>更新日志:</strong> {{.ReleaseNotes}}</p>
+                    <p><strong>更新说明：</strong><span class="release-notes">{{.ReleaseNotes}}</span></p>
                 </div>
                 {{end}}
             </div>
@@ -63,62 +62,125 @@
         </div>
 
         <button class="button delete-app-btn" data-package="{{.App.PackageName}}">删除整个应用</button>
+    </div>
 
+    <div class="modal-overlay" id="password-modal">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <h3 id="modal-title">删除确认</h3>
+            <p>此操作不可撤销，请输入删除密码进行确认。</p>
+            <input type="password" id="delete-password-input" placeholder="请输入删除密码">
+            <div class="modal-error" id="modal-error" aria-live="polite"></div>
+            <div class="modal-actions">
+                <button class="button secondary-btn" id="modal-cancel-btn" type="button">取消</button>
+                <button class="button upload-btn" id="modal-confirm-btn" type="button">确认删除</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handler for deleting a single build
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const packageName = this.dataset.package;
-                    const fileName = this.dataset.file;
-                    
-                    if (confirm(`您确定要删除这个构建版本 (${fileName}) 吗？此操作不可撤销。`)) {
-                        fetch(`/api/builds/${packageName}/${fileName}`, {
-                            method: 'DELETE',
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.message) {
-                                alert('删除成功！');
-                                location.reload(); // Reload the page to see the result
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('password-modal');
+            const passwordInput = document.getElementById('delete-password-input');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+            const errorBox = document.getElementById('modal-error');
+            let pendingAction = null;
+
+            const openModal = (action) => {
+                pendingAction = action;
+                errorBox.textContent = '';
+                passwordInput.value = '';
+                modal.classList.add('visible');
+                passwordInput.focus();
+            };
+
+            const closeModal = () => {
+                modal.classList.remove('visible');
+                pendingAction = null;
+            };
+
+            cancelBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            const sendDeleteRequest = (password) => {
+                if (!pendingAction) {
+                    closeModal();
+                    return;
+                }
+
+                let url = '';
+                if (pendingAction.type === 'build') {
+                    url = `/api/builds/${pendingAction.packageName}/${pendingAction.fileName}?password=${encodeURIComponent(password)}`;
+                } else if (pendingAction.type === 'app') {
+                    url = `/api/apps/${pendingAction.packageName}?password=${encodeURIComponent(password)}`;
+                } else {
+                    errorBox.textContent = '未知操作类型。';
+                    return;
+                }
+
+                fetch(url, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message) {
+                            closeModal();
+                            if (pendingAction.type === 'build') {
+                                alert('版本删除成功。');
+                                window.location.reload();
                             } else {
-                                alert('删除失败: ' + (data.error || '未知错误'));
+                                alert('应用删除成功。');
+                                window.location.href = '/';
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('删除时发生网络错误。');
-                        });
-                    }
+                        } else {
+                            errorBox.textContent = data.error || '删除失败，请稍后再试。';
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        errorBox.textContent = '请求失败，请检查网络连接。';
+                    });
+            };
+
+            confirmBtn.addEventListener('click', () => {
+                const password = passwordInput.value.trim();
+                if (!password) {
+                    errorBox.textContent = '请输入删除密码。';
+                    passwordInput.focus();
+                    return;
+                }
+                sendDeleteRequest(password);
+            });
+
+            passwordInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    confirmBtn.click();
+                } else if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    openModal({
+                        type: 'build',
+                        packageName: button.dataset.package,
+                        fileName: button.dataset.file
+                    });
                 });
             });
 
-            // Handler for deleting the entire app
             const deleteAppButton = document.querySelector('.delete-app-btn');
-            if(deleteAppButton) {
-                deleteAppButton.addEventListener('click', function() {
-                    const packageName = this.dataset.package;
-                    
-                    if (confirm(`您确定要删除整个应用 "${packageName}" 吗？\n\n这将删除其所有的构建版本，此操作不可撤销！`)) {
-                        fetch(`/api/apps/${packageName}`, {
-                            method: 'DELETE',
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.message) {
-                                alert('应用删除成功！');
-                                window.location.href = '/'; // Redirect to homepage
-                            } else {
-                                alert('删除失败: ' + (data.error || '未知错误'));
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('删除时发生网络错误。');
-                        });
-                    }
+            if (deleteAppButton) {
+                deleteAppButton.addEventListener('click', () => {
+                    openModal({
+                        type: 'app',
+                        packageName: deleteAppButton.dataset.package
+                    });
                 });
             }
         });

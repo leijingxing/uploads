@@ -1,2 +1,27 @@
 [
+  {
+    "projectName": "日尼玛",
+    "apps": []
+  },
+  {
+    "projectName": "fuck",
+    "apps": [
+      {
+        "appName": "LibChecker",
+        "packageName": "com.absinthe.libchecker",
+        "iconPath": "",
+        "builds": [
+          {
+            "version": "2.5.1.e4fdf2d96",
+            "channel": "kaifa",
+            "releaseNotes": "12321321",
+            "fileName": "com.absinthe.libchecker-2.5.1.e4fdf2d96-kaifa-1761030636.apk",
+            "fileSize": 4548317,
+            "uploadTime": "2025-10-21 15:10:36",
+            "downloadURL": "/downloads/com.absinthe.libchecker-2.5.1.e4fdf2d96-kaifa-1761030636.apk"
+          }
+        ]
+      }
+    ]
+  }
 ]

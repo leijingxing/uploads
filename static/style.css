@@ -47,6 +47,14 @@ body {
     font-size: 2rem;
 }
 
+.header-link {
+    color: inherit;
+    text-decoration: none;
+}
+.header-link:hover {
+    color: var(--primary-color);
+}
+
 .header .search-box {
     width: 300px;
     padding: 10px 15px;
@@ -88,6 +96,15 @@ body {
     border-color: var(--primary-hover);
 }
 
+.submit-btn {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.submit-btn:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
 .delete-btn {
     background-color: var(--danger-color);
     border-color: var(--danger-color);
@@ -106,6 +123,15 @@ body {
 .delete-app-btn:hover {
     background-color: var(--danger-hover);
     border-color: var(--danger-hover);
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+.secondary-btn:hover {
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
 }
 
 /* --- App Grid & Cards (Index Page) --- */
@@ -309,6 +335,9 @@ body {
 .build-card-notes p strong {
     margin-right: 5px;
 }
+.release-notes {
+    white-space: pre-wrap;
+}
 
 
 /* --- Upload Page --- */
@@ -337,6 +366,69 @@ body {
 .form-group textarea {
     min-height: 120px;
     resize: vertical;
+}
+
+/* --- Modal --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 999;
+}
+.modal-overlay.visible {
+    display: flex;
+}
+.modal-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    max-width: 360px;
+    width: 100%;
+    padding: 24px;
+    text-align: center;
+    animation: modal-pop var(--transition-speed);
+}
+.modal-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.modal-card p {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+#delete-password-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.modal-error {
+    color: var(--danger-color);
+    min-height: 20px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+@keyframes modal-pop {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* --- Responsive Design --- */
